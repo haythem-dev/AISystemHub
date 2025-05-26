@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarContent, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { 
   Brain, 
@@ -129,11 +129,9 @@ export default function Message({ message }: MessageProps) {
           </div>
         </div>
         <Avatar className="w-10 h-10 flex-shrink-0">
-          <AvatarContent className="ai-gradient">
-            <AvatarFallback className="text-white text-sm font-medium">
-              JD
-            </AvatarFallback>
-          </AvatarContent>
+          <AvatarFallback className="ai-gradient text-white text-sm font-medium">
+            JD
+          </AvatarFallback>
         </Avatar>
       </div>
     );

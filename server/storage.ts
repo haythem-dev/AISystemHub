@@ -126,8 +126,9 @@ export class MemStorage implements IStorage {
     const id = this.currentConversationId++;
     const now = new Date();
     const conversation: Conversation = {
-      ...insertConversation,
       id,
+      title: insertConversation.title,
+      userId: insertConversation.userId || 'default-user',
       createdAt: now,
       updatedAt: now,
     };
@@ -175,8 +176,12 @@ export class MemStorage implements IStorage {
   async createMessage(insertMessage: InsertMessage): Promise<Message> {
     const id = this.currentMessageId++;
     const message: Message = {
-      ...insertMessage,
       id,
+      conversationId: insertMessage.conversationId,
+      role: insertMessage.role,
+      content: insertMessage.content,
+      model: insertMessage.model || null,
+      metadata: insertMessage.metadata || null,
       createdAt: new Date(),
     };
     this.messages.set(id, message);
@@ -184,7 +189,8 @@ export class MemStorage implements IStorage {
     // Update conversation timestamp
     const conversation = this.conversations.get(insertMessage.conversationId);
     if (conversation) {
-      await this.updateConversation(conversation.id, { updatedAt: new Date() });
+      conversation.updatedAt = new Date();
+      this.conversations.set(conversation.id, conversation);
     }
     
     return message;
@@ -213,7 +219,14 @@ export class MemStorage implements IStorage {
   }
 
   async createAiModel(insertModel: InsertAiModel): Promise<AiModel> {
-    const model: AiModel = { ...insertModel };
+    const model: AiModel = {
+      id: insertModel.id,
+      name: insertModel.name,
+      provider: insertModel.provider,
+      isActive: insertModel.isActive ?? true,
+      description: insertModel.description ?? null,
+      maxTokens: insertModel.maxTokens ?? 4096,
+    };
     this.aiModels.set(model.id, model);
     return model;
   }

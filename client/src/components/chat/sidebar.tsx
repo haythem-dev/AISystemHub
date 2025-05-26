@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Avatar, AvatarContent, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { 
@@ -207,11 +207,9 @@ export default function Sidebar({ conversations, currentConversationId, models }
         <Card className="p-3">
           <div className="flex items-center space-x-3">
             <Avatar className="w-8 h-8">
-              <AvatarContent className="ai-gradient">
-                <AvatarFallback className="text-white text-sm font-medium">
-                  JD
-                </AvatarFallback>
-              </AvatarContent>
+              <AvatarFallback className="ai-gradient text-white text-sm font-medium">
+                JD
+              </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-foreground truncate">
