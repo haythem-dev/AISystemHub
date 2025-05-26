@@ -5,6 +5,7 @@ import { storage } from "./storage";
 import { modelManager } from "./ai/model-manager";
 import { multiModelCoordinator } from "./ai/multi-model-coordinator";
 import { setupAuth } from "./auth";
+import { registerAutonomousRoutes } from "./routes-autonomous";
 import { 
   insertConversationSchema, 
   insertMessageSchema, 
@@ -15,6 +16,10 @@ import {
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication first
   setupAuth(app);
+  
+  // Register autonomous agent routes
+  registerAutonomousRoutes(app);
+  
   const httpServer = createServer(app);
 
   // REST API Routes

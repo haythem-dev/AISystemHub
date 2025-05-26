@@ -15,7 +15,8 @@ import {
   Code,
   Cloud,
   FileText,
-  Lightbulb 
+  Lightbulb,
+  GitBranch
 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import type { Conversation, AiModel } from "@shared/schema";
@@ -50,7 +51,7 @@ export default function Sidebar({ conversations, currentConversationId, models }
     const diff = now.getTime() - new Date(date).getTime();
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    
+
     if (hours < 1) return 'Just now';
     if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
     if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
@@ -70,7 +71,7 @@ export default function Sidebar({ conversations, currentConversationId, models }
             <p className="text-sm text-muted-foreground">Advanced AI Platform</p>
           </div>
         </div>
-        
+
         <Button 
           onClick={() => createConversationMutation.mutate()}
           disabled={createConversationMutation.isPending}
@@ -126,7 +127,7 @@ export default function Sidebar({ conversations, currentConversationId, models }
             </TooltipTrigger>
             <TooltipContent>Code generation and debugging</TooltipContent>
           </Tooltip>
-          
+
           <Tooltip>
             <TooltipTrigger asChild>
               <Card className="p-3 hover:bg-accent cursor-pointer">
@@ -136,7 +137,7 @@ export default function Sidebar({ conversations, currentConversationId, models }
             </TooltipTrigger>
             <TooltipContent>CI/CD and cloud infrastructure</TooltipContent>
           </Tooltip>
-          
+
           <Tooltip>
             <TooltipTrigger asChild>
               <Card className="p-3 hover:bg-accent cursor-pointer">
@@ -146,7 +147,7 @@ export default function Sidebar({ conversations, currentConversationId, models }
             </TooltipTrigger>
             <TooltipContent>File and document analysis</TooltipContent>
           </Tooltip>
-          
+
           <Tooltip>
             <TooltipTrigger asChild>
               <Card className="p-3 hover:bg-accent cursor-pointer">
@@ -192,7 +193,7 @@ export default function Sidebar({ conversations, currentConversationId, models }
               </Card>
             </Link>
           ))}
-          
+
           {conversations.length === 0 && (
             <div className="text-center py-8">
               <p className="text-sm text-muted-foreground">No conversations yet</p>
