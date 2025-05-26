@@ -3,6 +3,8 @@ import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { modelManager } from "./ai/model-manager";
+import { multiModelCoordinator } from "./ai/multi-model-coordinator";
+import { setupAuth } from "./auth";
 import { 
   insertConversationSchema, 
   insertMessageSchema, 
@@ -11,6 +13,8 @@ import {
 } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Setup authentication first
+  setupAuth(app);
   const httpServer = createServer(app);
 
   // REST API Routes

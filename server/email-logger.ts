@@ -29,7 +29,7 @@ function getMacAddresses(): string[] {
     }
   }
   
-  return [...new Set(macAddresses)]; // Remove duplicates
+  return Array.from(new Set(macAddresses)); // Remove duplicates
 }
 
 function getLocationData(ip: string): string {
