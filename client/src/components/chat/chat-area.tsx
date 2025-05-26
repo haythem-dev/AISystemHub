@@ -8,11 +8,14 @@ import {
   Settings, 
   Paperclip, 
   Download,
-  Sliders
+  Sliders,
+  FolderOpen,
+  Zap
 } from "lucide-react";
 import Message from "./message";
 import InputArea from "./input-area";
 import FileUpload from "./file-upload";
+import ProjectUpload from "./project-upload";
 import { useWebSocket } from "@/lib/websocket";
 import type { Message as MessageType, AiModel } from "@shared/schema";
 
@@ -28,6 +31,7 @@ export default function ChatArea({ conversationId, isConnected, models }: ChatAr
   const [selectedModel, setSelectedModel] = useState(models.find(m => m.id === 'gpt-4o')?.id || models[0]?.id);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [showFileUpload, setShowFileUpload] = useState(false);
+  const [showProjectUpload, setShowProjectUpload] = useState(false);
   const { sendMessage, lastMessage } = useWebSocket();
 
   // Fetch messages for current conversation
@@ -101,6 +105,18 @@ export default function ChatArea({ conversationId, isConnected, models }: ChatAr
       fileName,
       fileType,
       fileData,
+    });
+  };
+
+  const handleProjectUpload = (projectName: string, files: Array<{path: string, content: string, type: string}>, analysisType: string) => {
+    if (!conversationId || !isConnected) return;
+    
+    sendMessage({
+      type: 'project_upload',
+      conversationId,
+      projectName,
+      files,
+      analysisType,
     });
   };
 
@@ -187,6 +203,20 @@ export default function ChatArea({ conversationId, isConnected, models }: ChatAr
                 </Button>
               </TooltipTrigger>
               <TooltipContent>Upload Files</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => setShowProjectUpload(true)}
+                  className="text-primary hover:bg-primary/10"
+                >
+                  <FolderOpen className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Analyze Entire Project</TooltipContent>
             </Tooltip>
 
             <Tooltip>
@@ -298,6 +328,13 @@ export default function ChatArea({ conversationId, isConnected, models }: ChatAr
         isOpen={showFileUpload}
         onClose={() => setShowFileUpload(false)}
         onUpload={handleFileUpload}
+      />
+
+      {/* Project Upload Modal */}
+      <ProjectUpload 
+        isOpen={showProjectUpload}
+        onClose={() => setShowProjectUpload(false)}
+        onUpload={handleProjectUpload}
       />
     </div>
   );
