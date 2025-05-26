@@ -68,6 +68,27 @@ export type InsertAiModel = z.infer<typeof insertAiModelSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
 
+// Project analysis schemas
+export const projectAnalysis = pgTable("project_analysis", {
+  id: serial("id").primaryKey(),
+  conversationId: integer("conversation_id").notNull(),
+  projectName: text("project_name").notNull(),
+  analysisType: text("analysis_type").notNull(), // 'structure' | 'metrics' | 'uml' | 'architecture' | 'documentation'
+  fileCount: integer("file_count").default(0),
+  codeLines: integer("code_lines").default(0),
+  complexity: integer("complexity").default(0),
+  results: jsonb("results"), // Analysis results
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertProjectAnalysisSchema = createInsertSchema(projectAnalysis).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type ProjectAnalysis = typeof projectAnalysis.$inferSelect;
+export type InsertProjectAnalysis = z.infer<typeof insertProjectAnalysisSchema>;
+
 // WebSocket message types
 export const wsMessageSchema = z.discriminatedUnion("type", [
   z.object({
@@ -89,6 +110,23 @@ export const wsMessageSchema = z.discriminatedUnion("type", [
     fileName: z.string(),
     fileType: z.string(),
     fileData: z.string(), // base64
+  }),
+  z.object({
+    type: z.literal("project_upload"),
+    conversationId: z.number(),
+    projectName: z.string(),
+    files: z.array(z.object({
+      path: z.string(),
+      content: z.string(),
+      type: z.string(),
+    })),
+    analysisType: z.string(),
+  }),
+  z.object({
+    type: z.literal("analysis_progress"),
+    conversationId: z.number(),
+    progress: z.number(),
+    status: z.string(),
   }),
 ]);
 
