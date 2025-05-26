@@ -341,7 +341,7 @@ Generate:
   }
 
   private isComplexityNode(line: string): boolean {
-    return /^(if|else|elif|for|while|switch|case|catch|try|?.*)/.test(line);
+    return /^(if|else|elif|for|while|switch|case|catch|try|.*\?)/.test(line);
   }
 
   private findDuplicates(files: ProjectFile[]): number {

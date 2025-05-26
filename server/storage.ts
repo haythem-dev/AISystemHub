@@ -1,3 +1,5 @@
+import session from "express-session";
+import createMemoryStore from "memorystore";
 import { 
   conversations, 
   messages, 
@@ -13,7 +15,12 @@ import {
   type InsertUser 
 } from "@shared/schema";
 
+const MemoryStore = createMemoryStore(session);
+
 export interface IStorage {
+  // Session store
+  sessionStore: session.Store;
+  
   // User methods
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
@@ -41,6 +48,7 @@ export interface IStorage {
 }
 
 export class MemStorage implements IStorage {
+  public sessionStore: session.Store;
   private users: Map<number, User>;
   private conversations: Map<number, Conversation>;
   private messages: Map<number, Message>;
@@ -50,6 +58,9 @@ export class MemStorage implements IStorage {
   private currentMessageId: number;
 
   constructor() {
+    this.sessionStore = new MemoryStore({
+      checkPeriod: 86400000, // prune expired entries every 24h
+    });
     this.users = new Map();
     this.conversations = new Map();
     this.messages = new Map();
