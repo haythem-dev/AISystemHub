@@ -21,12 +21,14 @@ export const messages = pgTable("messages", {
 });
 
 export const aiModels = pgTable("ai_models", {
-  id: text("id").primaryKey(), // e.g., 'gpt-4o', 'claude-3-7-sonnet-20250219'
+  id: text("id").primaryKey(), // e.g., 'gpt-4o', 'claude-3-7-sonnet-20250219', 'deepseek-coder', 'perplexity-sonar'
   name: text("name").notNull(),
-  provider: text("provider").notNull(), // 'openai' | 'anthropic'
+  provider: text("provider").notNull(), // 'openai' | 'anthropic' | 'deepseek' | 'perplexity' | 'genspark'
   isActive: boolean("is_active").default(true).notNull(),
   description: text("description"),
   maxTokens: integer("max_tokens").default(4096),
+  capabilities: text("capabilities").array(), // ['code', 'search', 'analysis', 'uml', etc.]
+  category: text("category").default("general"), // 'general' | 'code' | 'search' | 'analysis'
 });
 
 export const users = pgTable("users", {
