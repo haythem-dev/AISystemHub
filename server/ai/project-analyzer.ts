@@ -32,7 +32,7 @@ interface ProjectStructure {
 }
 
 export class ProjectAnalyzer {
-  
+
   async analyzeProjectStructure(files: ProjectFile[]): Promise<ProjectStructure> {
     const structure: ProjectStructure = {
       directories: [],
@@ -121,7 +121,7 @@ export class ProjectAnalyzer {
   async generateUMLDiagram(files: ProjectFile[], diagramType: 'class' | 'sequence' | 'component' | 'architecture'): Promise<string> {
     // Extract project structure for UML generation
     const structure = await this.analyzeProjectStructure(files);
-    
+
     const projectDescription = `
 Project Structure:
 - Languages: ${Object.keys(structure.languages).join(', ')}
@@ -301,10 +301,10 @@ Generate:
     };
 
     let inBlockComment = false;
-    
+
     for (const line of lines) {
       const trimmed = line.trim();
-      
+
       if (!trimmed) {
         metrics.blankLines++;
       } else if (this.isComment(trimmed) || inBlockComment) {
@@ -313,11 +313,11 @@ Generate:
         if (trimmed.includes('*/')) inBlockComment = false;
       } else {
         metrics.codeLines++;
-        
+
         // Count functions and classes
         if (this.isFunctionDeclaration(trimmed)) metrics.functions++;
         if (this.isClassDeclaration(trimmed)) metrics.classes++;
-        
+
         // Calculate complexity (simplified)
         if (this.isComplexityNode(trimmed)) metrics.complexity++;
       }
@@ -341,7 +341,7 @@ Generate:
   }
 
   private isComplexityNode(line: string): boolean {
-    return /^(if|else|elif|for|while|switch|case|catch|try|.*\?)/.test(line);
+    return /^(if|else|elif|for|while|switch|case|catch|try)\b/.test(line);
   }
 
   private findDuplicates(files: ProjectFile[]): number {
